@@ -137,6 +137,14 @@ python antisite.py \
 
 ---
 
+## 📁 Data
+
+Train / validation / test splits for all four benchmarks (Paragraph, PECAN, AACDB, MIPE) are provided
+under **[`Data/`](Data/)** — each row gives the antibody heavy/light and antigen chain IDs **and their
+sequences**. See [`Data/README.md`](Data/README.md) for the schema and split sizes.
+
+---
+
 ## 🏋️ Training
 
 To reproduce AntiSite from scratch (data preparation, PLM embedding, ParaSurf feature precompute, and

@@ -22,6 +22,7 @@
 !/test_antisite/
 !/release/
 !/assets/
+!/Data/
 
 # pipeline helper scripts (small; referenced by the training docs)
 !/run_embeddings.sh
