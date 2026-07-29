@@ -14,7 +14,7 @@ PDB structures + chain metadata
         │
         ▼  (1) ParaSurf precompute        →  cache/{dataset}/{split}/      256-d surface features
         ▼  (2) build_dataset              →  examples/{dataset}/{split}/   sequences + labels + features
-        ▼  (3) build_embeddings (4 PLMs)  →  embeddings/{dataset}/{split}/ per-residue PLM embeddings
+        ▼  (3) build_embeddings (2 PLMs)  →  embeddings/{dataset}/{split}/ per-residue PLM embeddings
         ▼  (4) train / train_kfold        →  runs/{dataset}/               trained checkpoint
 ```
 
@@ -28,7 +28,7 @@ Run the ParaSurf surface-feature extractor on the antibody (receptor) structures
 256-d per-residue features used by the 3D path.
 
 ```bash
-python -m antisite.teacher.precompute \
+python -m antisite.parasurf.precompute \
     --pdb-dir  test_data/pdbs/Expanded_dataset_Paragraph/Entire_antibody_experiment/TRAIN \
     --weights  weights/Paragraph_expanded_entire_dataset_best.pth \
     --out-dir  cache/Paragraph_expanded/TRAIN \
@@ -36,9 +36,9 @@ python -m antisite.teacher.precompute \
 ```
 
 Repeat for each split (`TRAIN`, `VAL`, `TEST`). Helper scripts:
-[`run_precompute_pecan.sh`](run_precompute_pecan.sh),
-[`run_precompute_paragraph.sh`](run_precompute_paragraph.sh),
-[`run_precompute_mipe.sh`](run_precompute_mipe.sh).
+[`scripts/run_precompute_pecan.sh`](scripts/run_precompute_pecan.sh),
+[`scripts/run_precompute_paragraph.sh`](scripts/run_precompute_paragraph.sh),
+[`scripts/run_precompute_mipe.sh`](scripts/run_precompute_mipe.sh).
 
 ## 2. Build training examples
 
@@ -55,17 +55,17 @@ python -m antisite.data.build_dataset \
 
 ## 3. Build PLM embeddings
 
-Precompute per-residue embeddings for the four PLMs (AbLang2, ProtT5, ESM-2, IgT5).
+Precompute per-residue embeddings for the two PLMs (ProtT5, ESM-2).
 
 ```bash
 python -m antisite.data.build_embeddings \
     --examples-dir examples/Paragraph_expanded/TRAIN \
     --out-dir      embeddings/Paragraph_expanded/TRAIN \
-    --plms ablang2,prot_t5,esm2,igt5 \
+    --plms prot_t5,esm2 \
     --batch-size 16 --gpu 0
 ```
 
-All splits at once: [`run_embeddings.sh`](run_embeddings.sh).
+All splits at once: [`scripts/run_embeddings.sh`](scripts/run_embeddings.sh).
 
 ---
 
@@ -108,7 +108,7 @@ directory. Training writes per-epoch metrics to `history.json` and a metrics cha
 
 | Setting | Value |
 |---|---|
-| PLM stack | AbLang2, ProtT5, ESM-2, IgT5 |
+| PLM stack | ProtT5, ESM-2 |
 | Modality dropout `p` | 0.5 |
 | Cross-modal attention | 1 layer, 4 heads |
 | Loss | binary cross-entropy (fused head only; `λ_kl = λ_mse = 0`) |

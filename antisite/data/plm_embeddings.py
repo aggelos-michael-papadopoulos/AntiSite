@@ -13,14 +13,16 @@ import warnings
 from collections.abc import Callable
 from pathlib import Path
 
-import ablang2
 import esm
 import numpy as np
 import torch
 import torch.nn.functional as F  # noqa: N812
-from antiberty import AntiBERTyRunner
 from tqdm import tqdm
 from transformers import BertModel, BertTokenizer, T5EncoderModel, T5Tokenizer
+
+# NOTE: ablang2 and antiberty back the antibody-specific PLMs (AbLang2, AntiBERTy),
+# which the released 2-PLM AntiSite (ProtT5 + ESM-2) does not use. They are imported
+# lazily inside their compute functions so the package installs and runs without them.
 
 warnings.filterwarnings("ignore")
 
@@ -84,6 +86,8 @@ def compute_antiberty_embeddings(
     -------
         torch.Tensor: Antiberty embeddings.
     """
+    from antiberty import AntiBERTyRunner  # lazy: optional antibody-PLM dependency
+
     antiberty = AntiBERTyRunner()  # Move to GPU
     antiberty_sequences = [
         "".join(seq_heavy) + "".join(seq_light)
@@ -121,6 +125,8 @@ def compute_ablang_embeddings(
     -------
         torch.Tensor: Ablang2 embeddings.
     """
+    import ablang2  # lazy: optional antibody-PLM dependency
+
     ablang = ablang2.pretrained()  # Move to GPU
     all_seqs = [
         [seq_heavy, seq_light]

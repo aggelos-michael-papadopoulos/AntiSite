@@ -25,10 +25,7 @@
 !/Data/
 
 # pipeline helper scripts (small; referenced by the training docs)
-!/run_embeddings.sh
-!/run_precompute_pecan.sh
-!/run_precompute_paragraph.sh
-!/run_precompute_mipe.sh
+!/scripts/
 
 # Docker packaging (the weights baked at build time stay ignored, see below)
 !/Dockerfile
