@@ -21,7 +21,7 @@ attention layer, so that **one checkpoint serves two inference modes**:
 The fused head is identical in both modes — no separate heads, no model swap. Feed real ParaSurf
 features for the 3D path, or zeros for the sequence-only path.
 
-![AntiSite overview](assets/antisite_overview.png)
+![AntiSite overview](assets/antisite_overview_new.png)
 
 ---
 
