@@ -125,14 +125,6 @@ python antisite.py \
     --parasurf-weights ParaSurf/Paragraph_expanded_entire_dataset_best.pth #frozen ParaSurf
 ```
 
-Heavy/light chains are detected from the PDB, ParaSurf extracts 256-d surface features per residue, and
-the fused head combines them with the PLM embeddings.
-
-Both commands print per-residue paratope probabilities (one value per residue). Options:
-`--out file.txt` to save the text, `--gpu N` to choose a device, and `--plot fig.png` to also render a
-visualization.
-
-
 ---
 
 ## 🏋️ Training
