@@ -1,0 +1,32 @@
+# Whitelist: ignore EVERYTHING, then re-include only the AntiSite release files
+# (the same set tracked in git) plus the Docker build scaffolding + baked weights.
+# This guarantees the build context — and therefore the image — contains nothing
+# beyond the public GitHub fileset.
+
+# 1) ignore every top-level entry
+*
+
+# 2) re-include the release essentials (mirrors .gitignore)
+!README.md
+!TRAIN.md
+!LICENSE
+!pyproject.toml
+!antisite.py
+!antisite/
+!test_antisite/
+!release/
+!run_embeddings.sh
+!run_precompute_pecan.sh
+!run_precompute_paragraph.sh
+!run_precompute_mipe.sh
+
+# 3) Docker build scaffolding (+ weights baked at build time)
+!Dockerfile
+!docker/
+
+# 4) re-ignore junk that may live inside the re-included directories
+**/__pycache__/
+**/*.py[cod]
+*.egg-info/
+.DS_Store
+.ipynb_checkpoints/

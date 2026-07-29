@@ -1,0 +1,45 @@
+# =============================================================================
+#  Whitelist .gitignore — ignore EVERYTHING, then re-include only the files
+#  needed to install, test (run inference on) and train AntiSite.
+#
+#  Excluded by design (too large / regenerated / not part of the code release):
+#    embeddings/  examples/  test_data/  weights/  runs/  cache/  logs/
+#    results/  figures/  ParaSurf/  Paraplume/  AntiSite_manuscript/
+#    supplementary_material/  and all scratch images / notes.
+# =============================================================================
+
+# 1) ignore every top-level entry
+/*
+
+# 2) re-include the essentials
+!/.gitignore
+!/README.md
+!/TRAIN.md
+!/LICENSE
+!/pyproject.toml
+!/antisite.py
+!/antisite/
+!/test_antisite/
+!/release/
+!/assets/
+
+# pipeline helper scripts (small; referenced by the training docs)
+!/run_embeddings.sh
+!/run_precompute_pecan.sh
+!/run_precompute_paragraph.sh
+!/run_precompute_mipe.sh
+
+# Docker packaging (the weights baked at build time stay ignored, see below)
+!/Dockerfile
+!/.dockerignore
+!/docker/
+
+# 3) re-ignore junk that may live inside the re-included directories
+**/__pycache__/
+**/*.py[cod]
+*.egg-info/
+.DS_Store
+.ipynb_checkpoints/
+
+# Docker build context: large weights baked at build time (not versioned)
+docker/weights/
