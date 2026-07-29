@@ -87,7 +87,7 @@ cd ParaSurf/dms && sudo make install && cd ../..
 #        ParaSurf/Paragraph_expanded_entire_dataset_best.pth
 ```
 
-Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_entire_dataset_best.pth](https://drive.google.com/uc?export=download&id=1mEBLPKi1sny-inr1ogdYWoo44XgbH8db)
+Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_entire_dataset_best.pth](https://drive.google.com/uc?export=download&id=1nd3npYK303e8owDBvW8Ygd5m9SD1puhR)
 
 > Do **not** run `pip install -r ParaSurf/requirements.txt` inside this environment; it pins an older
 > `torch` and will break the AntiSite install. The steps above are all the 3D path needs.
@@ -95,8 +95,18 @@ Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_e
 At inference, point AntiSite at a ParaSurf weight file with `--parasurf-weights` (3D mode); omit the
 structure to run sequence-only.
 
-The released model is [`release/checkpoints/antisite_paragraph.pt`](release/checkpoints/antisite_paragraph.pt);
-the same file runs both inference modes.
+The headline released model is [`release/checkpoints/antisite_paragraph.pt`](release/checkpoints/antisite_paragraph.pt);
+the same file runs both inference modes. Checkpoints trained on each benchmark are provided under
+[`release/checkpoints/`](release/checkpoints/):
+
+| Checkpoint | Trained on |
+|---|---|
+| `antisite_paragraph.pt` | Paragraph (headline model) |
+| `antisite_pecan.pt` | PECAN |
+| `antisite_aacdb.pt` | AACDB |
+| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold) |
+
+Every checkpoint uses the same 2-PLM (ProtT5 + ESM-2) architecture and runs both inference modes.
 
 ---
 
