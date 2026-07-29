@@ -87,7 +87,7 @@ cd ParaSurf/dms && sudo make install && cd ../..
 #        ParaSurf/Paragraph_expanded_entire_dataset_best.pth
 ```
 
-Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_entire_dataset_best.pth]()
+Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_entire_dataset_best.pth](https://drive.google.com/uc?export=download&id=1mEBLPKi1sny-inr1ogdYWoo44XgbH8db)
 
 > Do **not** run `pip install -r ParaSurf/requirements.txt` inside this environment; it pins an older
 > `torch` and will break the AntiSite install. The steps above are all the 3D path needs.
