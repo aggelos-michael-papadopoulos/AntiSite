@@ -5,7 +5,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
-[![Docker Pulls](https://img.shields.io/docker/pulls/angepapa/antisite?logo=docker)](https://hub.docker.com/r/angepapa/antisite)
 
 AntiSite predicts the antibody **paratope** (the residues that contact antigen) from a single trained
 model. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
