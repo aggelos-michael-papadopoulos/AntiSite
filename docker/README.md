@@ -10,7 +10,8 @@ have the image there is **nothing left to download** and no native dependencies 
 docker pull angepapa/antisite:latest          # or: sudo docker pull angepapa/antisite:latest
 ```
 
-The rest of this page is for **building the image yourself**.
+The rest of this page covers **running predictions**, the **offline smoke test**, and **building the
+image yourself**.
 
 ## Requirements
 
@@ -53,16 +54,3 @@ docker run --rm --gpus all -v "$PWD":/data antisite:latest python antisite.py \
 ```
 
 `$PARASURF_WEIGHTS` is already set inside the image, so you can pass it as-is.
-
-## 📤 Publish to Docker Hub (maintainers)
-
-```bash
-docker login
-docker build -t antisite:latest .
-docker tag antisite:latest angepapa/antisite:latest
-docker push angepapa/antisite:latest
-
-# optional: also publish an immutable version tag for citation
-docker tag antisite:latest angepapa/antisite:1.0
-docker push angepapa/antisite:1.0
-```

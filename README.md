@@ -26,13 +26,13 @@ features for the 3D path, or zeros for the sequence-only path.
 
 ---
 
-## Installation
+## ⚙️ Installation
 
 AntiSite's headline model is structure-aware, so the full install below sets up **both** the sequence
 and the 3D (ParaSurf) path. The same checkpoint can still run **sequence-only at inference** when you
 have no structure; that is a runtime choice, not a lighter install.
 
-### Docker (recommended — zero setup, nothing to download)
+### 🐳 Docker (recommended — zero setup, nothing to download)
 
 A **fully self-contained** GPU image is the easiest way to run AntiSite. It bakes in the code, the
 ParaSurf surface stack (DMS, OpenBabel, pdb2pqr) and **all** model weights — AntiSite checkpoints,
@@ -41,36 +41,20 @@ native dependencies to install. Requirements: an NVIDIA GPU with the
 [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 (so `--gpus all` works).
 
-**Pull the pre-built image** (no build, nothing to download):
+**Pull the pre-built image:**
 
 ```bash
 docker pull angepapa/antisite:latest          # or: sudo docker pull angepapa/antisite:latest
 ```
 
-**Run it:**
-
-```bash
-# Offline smoke test — runs sequence-only AND 3D on a bundled sample.
-docker run --rm --gpus all angepapa/antisite:latest bash smoke_test.sh
-
-# Sequence-only prediction
-docker run --rm --gpus all angepapa/antisite:latest python antisite.py \
-    --weights release/checkpoints/antisite_paragraph.pt -vh <HEAVY_SEQ> -vl <LIGHT_SEQ>
-
-# 3D prediction on your own structure (mount the folder that holds it)
-docker run --rm --gpus all -v "$PWD":/data angepapa/antisite:latest python antisite.py \
-    --weights release/checkpoints/antisite_paragraph.pt \
-    --antibody /data/my_antibody.pdb --parasurf-weights "$PARASURF_WEIGHTS"
-```
-
-> **Prefer to build the image yourself** (instead of pulling)? Full build and smoke-test
-> instructions are in **[docker/README.md](docker/README.md)**.
+👉 For how to **run predictions**, run the **offline smoke test**, and **build the image yourself**, see
+**[docker/README.md](docker/README.md)**.
 
 > Prefer a manual install, or no GPU-in-Docker? Use the from-source steps below.
 
 ---
 
-### 1. Core package (manual install from source)
+### 📦 1. Core package (manual install from source)
 
 ```bash
 git clone https://github.com/aggelos-michael-papadopoulos/AntiSite.git
@@ -84,7 +68,7 @@ This installs AntiSite and PyTorch, the **two protein language models** (**ProtT
 pretrained weights download automatically from HuggingFace on first use), and the
 extra dependencies ParaSurf needs (`torchsummary`, `jsonpickle`).
 
-### 2. ParaSurf (structure features)
+### 🧬 2. ParaSurf (structure features)
 
 The 3D path runs [ParaSurf](https://github.com/aggelos-michael-papadopoulos/ParaSurf) to extract
 molecular-surface features from the antibody structure:
@@ -117,7 +101,7 @@ the same file runs both inference modes.
 
 ---
 
-## Inference
+## 🔮 Inference
 
 One command, **one `.pt` file**, two operating modes — the same checkpoint handles both.
 
@@ -152,18 +136,18 @@ visualization.
 
 ---
 
-## Training
+## 🏋️ Training
 
 To reproduce AntiSite from scratch (data preparation, PLM embedding, ParaSurf feature precompute, and
 single-dataset / 5-fold training), see **[TRAIN.md](TRAIN.md)**.
 
 ---
 
-## License
+## 📄 License
 
 Released under the [MIT License](LICENSE).
 
-## Citation
+## 📖 Citation
 
 ```bibtex
 coming soon ...
