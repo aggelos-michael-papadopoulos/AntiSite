@@ -34,7 +34,7 @@ Run the ParaSurf surface-feature extractor on the antibody (receptor) structures
 ```bash
 python -m antisite.parasurf.precompute \
     --pdb-dir  test_data/pdbs/Expanded_dataset_Paragraph/Entire_antibody_experiment/TRAIN \
-    --weights  weights/Paragraph_expanded_entire_dataset_best.pth \
+    --weights  ParaSurf/Paragraph_expanded_entire_dataset_best.pth \
     --out-dir  cache/Paragraph_expanded/TRAIN \
     --pattern  '*receptor*.pdb'
 ```
@@ -88,13 +88,14 @@ python -m antisite.data.build_embeddings \
     --batch-size 16 --gpu 0 --overwrite
 ```
 
-All splits at once: [`scripts/run_embeddings.sh`](scripts/run_embeddings.sh).
+All prepared Paragraph, PECAN, and MIPE splits at once:
+[`scripts/run_embeddings.sh`](scripts/run_embeddings.sh).
 
 ---
 
 ## 4. Train
 
-### Single dataset (PECAN / Paragraph)
+### Single dataset (Paragraph / PECAN / AACDB)
 
 ```bash
 python -m antisite.train.train \
@@ -103,9 +104,10 @@ python -m antisite.train.train \
     --val-examples       examples/Paragraph_expanded/VAL \
     --val-embeddings     embeddings/Paragraph_expanded/VAL \
     --out-dir            runs/Paragraph \
+    --enabled-plms       prot_t5 esm2 \
     --modality-dropout   0.5 \
     --cross-modal-layers 1 --cross-modal-heads 4 \
-    --lambda-fused 1.0 --lambda-kl 0 --lambda-mse 0 \
+    --lambda-fused       1.0 \
     --track-head fused
 ```
 
@@ -119,9 +121,10 @@ python -m antisite.train.train_kfold \
     --test-embeddings      embeddings/MIPE/TEST \
     --out-dir              runs/MIPE \
     --folds 5 \
-    --modality-dropout   0.5 \
-    --cross-modal-layers 1 --cross-modal-heads 4 \
-    --lambda-fused 1.0 --lambda-kl 0 --lambda-mse 0
+    --enabled-plms         prot_t5 esm2 \
+    --modality-dropout     0.5 \
+    --cross-modal-layers   1 --cross-modal-heads 4 \
+    --lambda-fused         1.0
 ```
 
 The best checkpoint (selected on validation PR-AUC of the fused head) is written to the output
@@ -134,8 +137,8 @@ directory. Training writes per-epoch metrics to `history.json` and a metrics cha
 | PLM stack | ProtT5, ESM-2 |
 | Modality dropout `p` | 0.5 |
 | Cross-modal attention | 1 layer, 4 heads |
-| Loss | binary cross-entropy (fused head only; `λ_kl = λ_mse = 0`) |
-| Optimizer | Adam, lr `1e-4`, weight decay `1e-5` |
+| Loss | auxiliary BCE + fused BCE (`L_aux + λ_fused L_fused`, `λ_fused = 1.0`) |
+| Optimizer | AdamW, lr `1e-4`, weight decay `1e-5` |
 | Batch size | 8 |
 | Early stopping | val PR-AUC, patience 7 |
 
