@@ -63,15 +63,16 @@ embedding after changing sequence or chain metadata; otherwise stale tensors sil
 old inputs. ParaSurf caches are keyed to physical PDB residues and may be reused after verifying they
 cover the corrected selected chains.
 
-AACDB stores receptor and antigen chains in one combined PDB. Build each preserved split with the same
-builder and the combined-layout flag, for example:
+AACDB stores receptor and antigen chains in one combined PDB. From the repository root, place the
+combined structures under `test_data/pdbs/AACDB/all_structures/`, then build each preserved split with
+the same builder and the combined-layout flag, for example:
 
 ```bash
 python -m antisite.data.build_dataset \
-    --pdb-dir /media/panagiotis/605ACFF0319B3722/AACDB/AACDB_dataset_all_structures \
+    --pdb-dir test_data/pdbs/AACDB/all_structures \
     --meta Data/AACDB/train.csv \
-    --cache /media/panagiotis/605ACFF0319B3722/AACDB/cache/parasurf \
-    --out-dir /media/panagiotis/605ACFF0319B3722/AACDB/cache/corrected/train/examples \
+    --cache cache/AACDB/parasurf \
+    --out-dir examples/AACDB/TRAIN \
     --combined-pdb --overwrite
 ```
 
