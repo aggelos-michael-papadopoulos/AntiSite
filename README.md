@@ -125,7 +125,7 @@ The PLMs encode the sequences and the fused head is fed **zero** 3D features (mo
 it to handle this).
 
 <p align="center">
-  <img src="assets/pathA_output.png" width="650" alt="Sequence-only paratope prediction">
+  <img src="assets/pathA_output.png" width="500" alt="Sequence-only paratope prediction">
 </p>
 <p align="center"><em>Sequence-only residue-level paratope probabilities.</em></p>
 
