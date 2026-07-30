@@ -37,12 +37,12 @@ the atomic coordinates is invented from `SEQRES`.
 The row memberships match the paper's supplementary splits. The sequence and chain-role fields below
 are the corrected metadata; they are not the historical inputs stored in the released checkpoints.
 
-| Dataset | Train | Val | Test | Notes |
-|---|---:|---:|---:|---|
-| Paragraph (expanded) | 624 | 214 | 216 | Primary benchmark (headline model). |
-| PECAN | 195 | 101 | 152 | |
-| AACDB | 3994 | 674 | 546 | Published memberships preserved; corrected sequences are not cluster-disjoint (see audit). |
-| MIPE | 528 (`train_val`) | — | 63 | **5-fold** cross-validation over `train_val`. |
+| Dataset | Train | Val | Test |
+|---|---:|---:|---:|
+| Paragraph (expanded) | 624 | 214 | 216 |
+| PECAN | 195 | 101 | 152 |
+| AACDB | 3994 | 674 | 546 |
+| MIPE | 528 (`train_val`) | — | 63 |
 
 ## Notes
 
