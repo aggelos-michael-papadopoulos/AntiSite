@@ -134,7 +134,7 @@ it to handle this).
 ```bash
 python antisite.py \
     --weights release/checkpoints/antisite_paragraph.pt \
-    --antibody 1BVK_antibody.pdb \
+    --antibody 1FSK_antibody.pdb \
     --parasurf-weights ParaSurf/Paragraph_expanded_entire_dataset_best.pth #frozen ParaSurf
 ```
 
@@ -170,7 +170,6 @@ Released under the [MIT License](LICENSE).
 
 ## 📖 Citation
 
-```bibtex
+
 Citation coming soon. The full manuscript citation will be added here after publication.
 
-```
