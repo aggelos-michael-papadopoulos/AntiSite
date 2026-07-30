@@ -44,18 +44,3 @@ are the corrected metadata; they are not the historical inputs stored in the rel
 | AACDB | 3994 | 674 | 546 |
 | MIPE | 528 (`train_val`) | — | 63 |
 
-## Notes
-
-- Every one of the 7,307 rows has non-empty `heavy_seq`, `light_seq`, and `antigen_seq` values.
-- Five AACDB light chains have only 67–78 atom-resolved residues. They are retained as observed rather
-  than padded with residues that have no coordinates.
-- Six AACDB rows are structurally nonstandard (fusion, diabody, or no conventional heavy chain). Their
-  published split IDs are preserved, but they must not be described as ordinary paired H/L complexes.
-- These splits reflect AntiSite's own filtering/feature-extraction pipeline; they are **not** identical
-  to ParaSurf's published `training_data/` splits, which come from a different pipeline over the same
-  source datasets.
-
-The corrected AACDB strings place 21 CD-HIT-70% clusters across the preserved split boundaries.
-Restoring cluster separation requires a new split rather than a sequence-column repair. Existing
-released checkpoints and published metrics represent the historical inputs; corrected model results
-require rebuilding examples and embeddings and then retraining.
