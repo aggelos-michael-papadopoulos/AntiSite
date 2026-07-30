@@ -19,7 +19,7 @@ attention layer, so that **one checkpoint serves two inference modes**:
 | **Sequence-only** | Heavy + light chain sequences | No structure available |
 | **3D** | Sequences **+** a structure (ParaSurf features) | Structure available, best accuracy |
 
-![AntiSite overview](assets/antisite_overview_new.png)
+![AntiSite overview](assets/antisite_overview_transparent.png)
 
 ---
 
@@ -172,4 +172,3 @@ Released under the [MIT License](LICENSE).
 
 
 Citation coming soon. The full manuscript citation will be added here after publication.
-
