@@ -4,7 +4,7 @@ Usage:
     python -m antisite.eval.eval_paraplume \
         --dataset PECAN \
         --pdb-dir test_data/pdbs/PECAN/TEST \
-        --meta    test_data/pdbs/PECAN/preprocess/test_set.csv \
+        --meta    Data/PECAN/test.csv \
         [--gpu 0] [--no-large]
 """
 
@@ -19,7 +19,12 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from antisite.eval.labels import extract_sequence, get_labels
+from antisite.eval.labels import (
+    extract_sequence,
+    get_labels,
+    parse_pdb_chain_ids,
+    select_fv_residues,
+)
 from antisite.eval.metrics import aggregate_metrics, per_protein_metrics, print_table
 
 
@@ -47,10 +52,13 @@ def evaluate(
 
     for row in tqdm(rows, desc="Evaluating Paraplume"):
         pdb_id = row["pdb_code"]
-        heavy  = row["Heavy_chain"]
-        light  = row.get("Light_chain", "") or ""
-        ag_str = row.get("ag", "")
-        ag_chains = set(ag_str.replace(";", " ").split()) if ag_str else set()
+        heavy = row.get("heavy_chain") or row.get("Heavy_chain") or ""
+        light = row.get("light_chain") or row.get("Light_chain") or ""
+        ag_str = row.get("antigen_chain") or row.get("ag") or ""
+        ag_chains = set(parse_pdb_chain_ids(ag_str))
+
+        if not heavy or not light:
+            raise ValueError(f"{pdb_id}: metadata must specify paired heavy and light chains")
 
         receptor_pdb = pdb_dir / f"{pdb_id}_receptor_1.pdb"
         antigen_pdb  = next(pdb_dir.glob(f"{pdb_id}_antigen*.pdb"), None)
@@ -59,8 +67,8 @@ def evaluate(
             n_skip += 1
             continue
 
-        # Paraplume expects Fv (variable domain) sequences only — full Fab overflows
-        # ablang2's 285-token pad limit. IMGT variable domain ends at ~residue 128.
+        # Paraplume expects Fv-sized inputs — full Fab overflows ablang2's
+        # 285-token pad limit. The centralized selector also handles offset numbering.
         heavy_seq = extract_sequence(receptor_pdb, heavy, max_resnum=128)
         light_seq = extract_sequence(receptor_pdb, light, max_resnum=128) if light else ""
 
@@ -88,25 +96,8 @@ def evaluate(
         # to stay consistent with how labels keys are defined.
         y_scores, y_labels = [], []
 
-        # Heavy chain residues in PDB order — same Fv cutoff as sequence extraction
-        seen: set[str] = set()
-        heavy_res_ids: list[str] = []
-        with receptor_pdb.open() as f:
-            for line in f:
-                if not line.startswith("ATOM") or line[21] != heavy:
-                    continue
-                if line[12:16].strip() != "CA":
-                    continue
-                resnum = line[22:26].strip()
-                if int(resnum) > 128:
-                    continue
-                ins    = line[26].strip()
-                rid    = f"{resnum}_{heavy}"
-                if ins:
-                    rid = f"{rid}_{ins}"
-                if rid not in seen:
-                    seen.add(rid)
-                    heavy_res_ids.append(rid)
+        # Use the identical centralized selection as sequence extraction.
+        heavy_res_ids = [r.res_id for r in select_fv_residues(receptor_pdb, heavy)]
 
         for rid, prob in zip(heavy_res_ids, heavy_probs):
             if rid in labels:
@@ -114,24 +105,7 @@ def evaluate(
                 y_labels.append(labels[rid])
 
         if light_seq and light_probs is not None:
-            seen_l: set[str] = set()
-            light_res_ids: list[str] = []
-            with receptor_pdb.open() as f:
-                for line in f:
-                    if not line.startswith("ATOM") or line[21] != light:
-                        continue
-                    if line[12:16].strip() != "CA":
-                        continue
-                    resnum = line[22:26].strip()
-                    if int(resnum) > 128:
-                        continue
-                    ins    = line[26].strip()
-                    rid    = f"{resnum}_{light}"
-                    if ins:
-                        rid = f"{rid}_{ins}"
-                    if rid not in seen_l:
-                        seen_l.add(rid)
-                        light_res_ids.append(rid)
+            light_res_ids = [r.res_id for r in select_fv_residues(receptor_pdb, light)]
 
             for rid, prob in zip(light_res_ids, light_probs):
                 if rid in labels:

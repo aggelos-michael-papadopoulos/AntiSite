@@ -2,7 +2,7 @@
 
 Each example fuses three sources of truth into one tensor bundle, aligned residue-by-residue:
 
-  • Sequence (Fv heavy + Fv light, IMGT V-domain cutoff at resnum <= 128)
+  • Sequence (atom-resolved Fv-sized heavy + light inputs)
   • Ground-truth paratope labels (4.5 A criterion vs antigen)
   • ParaSurf outputs (per-residue 256-d pre-classifier surface features)
 
@@ -24,7 +24,7 @@ Run once per (dataset, split). Training then just loads these bundles — no PDB
 Usage:
     python -m antisite.data.build_dataset \\
         --pdb-dir   test_data/pdbs/PECAN/TEST \\
-        --meta      test_data/pdbs/PECAN/preprocess/test_set.csv \\
+        --meta      Data/PECAN/test.csv \\
         --cache     cache/PECAN/TEST \\
         --out-dir   examples/PECAN/TEST
 """
@@ -43,9 +43,14 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from antisite.eval.labels import extract_sequence, get_labels  # noqa: E402
+from antisite.eval.labels import (  # noqa: E402
+    FV_MAX_RESNUM,
+    extract_sequence,
+    get_labels,
+    parse_pdb_chain_ids,
+    select_fv_residues,
+)
 
-FV_MAX_RESNUM = 128
 SURFACE_FEAT_DIM = 256
 
 
@@ -55,33 +60,8 @@ def _load_meta(meta_csv: Path) -> list[dict]:
 
 
 def _fv_res_ids_in_order(receptor_pdb: Path, chain: str) -> list[str]:
-    """Residue IDs for a chain in PDB-appearance order, filtered to Fv (resnum <= 128).
-
-    Matches the convention used by ParaSurfExtractor/extract_sequence so every source
-    (seq, labels, ParaSurf cache) keys off the same strings.
-    """
-    seen: set[str] = set()
-    res_ids: list[str] = []
-    with receptor_pdb.open() as f:
-        for line in f:
-            if not line.startswith("ATOM") or line[21] != chain:
-                continue
-            if line[12:16].strip() != "CA":
-                continue
-            resnum = line[22:26].strip()
-            if not resnum.lstrip("-").isdigit():
-                continue
-            if int(resnum) > FV_MAX_RESNUM:
-                continue
-            ins = line[26].strip()
-            rid = f"{resnum}_{chain}"
-            if ins:
-                rid = f"{rid}_{ins}"
-            if rid in seen:
-                continue
-            seen.add(rid)
-            res_ids.append(rid)
-    return res_ids
+    """Return exactly the residue IDs used by :func:`extract_sequence`."""
+    return [residue.res_id for residue in select_fv_residues(receptor_pdb, chain)]
 
 
 def build_example(
@@ -162,6 +142,7 @@ def build_split(
     cache_dir: Path,
     out_dir: Path,
     overwrite: bool = False,
+    combined_pdb: bool = False,
 ) -> None:
     rows = _load_meta(meta_csv)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -171,19 +152,27 @@ def build_split(
 
     for row in tqdm(rows, desc=f"Building {out_dir.name}"):
         pdb_id = row["pdb_code"]
-        heavy  = row["Heavy_chain"]
-        light  = row.get("Light_chain", "") or ""
-        ag_str = row.get("ag", "")
-        ag_chains = set(ag_str.replace(";", " ").split()) if ag_str else set()
+        heavy = row.get("heavy_chain") or row.get("Heavy_chain") or ""
+        light = row.get("light_chain") or row.get("Light_chain") or ""
+        ag_str = row.get("antigen_chain") or row.get("ag") or ""
+        ag_chains = set(parse_pdb_chain_ids(ag_str))
+
+        if not heavy or not light:
+            raise ValueError(f"{pdb_id}: metadata must specify paired heavy and light chains")
 
         out_path = out_dir / f"{pdb_id}.pt"
         if out_path.exists() and not overwrite:
             n_done += 1
             continue
 
-        receptor_pdb = pdb_dir / f"{pdb_id}_receptor_1.pdb"
-        antigen_pdb  = next(pdb_dir.glob(f"{pdb_id}_antigen*.pdb"), None)
-        cache_file   = cache_dir / f"{pdb_id}_receptor_1.pt"
+        if combined_pdb:
+            receptor_pdb = pdb_dir / f"{pdb_id}.pdb"
+            antigen_pdb = receptor_pdb
+            cache_file = cache_dir / f"{pdb_id}_receptor.pt"
+        else:
+            receptor_pdb = pdb_dir / f"{pdb_id}_receptor_1.pdb"
+            antigen_pdb = next(pdb_dir.glob(f"{pdb_id}_antigen*.pdb"), None)
+            cache_file = cache_dir / f"{pdb_id}_receptor_1.pt"
 
         if not receptor_pdb.exists() or antigen_pdb is None or not cache_file.exists():
             n_skip += 1
@@ -219,12 +208,32 @@ def build_split(
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pdb-dir",  type=Path, required=True, help="Directory of receptor+antigen PDBs for this split.")
-    ap.add_argument("--meta",     type=Path, required=True, help="CSV with pdb_code, Heavy_chain, Light_chain, ag.")
+    ap.add_argument(
+        "--meta",
+        type=Path,
+        required=True,
+        help="Released Data CSV (legacy Heavy_chain/Light_chain/ag schema is also accepted).",
+    )
     ap.add_argument("--cache",    type=Path, required=True, help="Directory of ParaSurf cache .pt files.")
     ap.add_argument("--out-dir",  type=Path, required=True, help="Output directory for per-antibody example .pt files.")
     ap.add_argument("--overwrite", action="store_true")
+    ap.add_argument(
+        "--combined-pdb",
+        action="store_true",
+        help=(
+            "Use AACDB-style {pdb_code}.pdb complexes for receptor and antigen, "
+            "with {pdb_code}_receptor.pt ParaSurf caches."
+        ),
+    )
     args = ap.parse_args()
-    build_split(args.pdb_dir, args.meta, args.cache, args.out_dir, args.overwrite)
+    build_split(
+        args.pdb_dir,
+        args.meta,
+        args.cache,
+        args.out_dir,
+        args.overwrite,
+        args.combined_pdb,
+    )
 
 
 if __name__ == "__main__":

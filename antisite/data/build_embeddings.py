@@ -68,6 +68,7 @@ def _load_examples(examples_dir: Path) -> list[dict]:
             "heavy_seq": ex["heavy_seq"],
             "light_seq": ex["light_seq"],
             "L":         len(ex["res_ids"]),
+            "source_path": p,
         })
     return out
 
@@ -120,7 +121,11 @@ def build_embeddings(
     if not overwrite:
         todo_idx = [
             i for i in todo_idx
-            if not _all_plms_present(out_dir / f"{examples[i]['pdb_id']}.pt", plms)
+            if not _all_plms_present(
+                out_dir / f"{examples[i]['pdb_id']}.pt",
+                plms,
+                examples[i]["source_path"],
+            )
         ]
     if not todo_idx:
         print("All examples already have embeddings — nothing to do.")
@@ -133,7 +138,17 @@ def build_embeddings(
     cached: dict[str, dict] = {}
     for ex in pending:
         p = out_dir / f"{ex['pdb_id']}.pt"
-        cached[ex["pdb_id"]] = torch.load(p, weights_only=True) if p.exists() else {}
+        source_is_current = (
+            p.exists()
+            and p.stat().st_mtime_ns >= ex["source_path"].stat().st_mtime_ns
+        )
+        # Never carry unrequested but stale PLM tensors into a newly timestamped
+        # bundle: a later partial run could otherwise mistake them for current.
+        cached[ex["pdb_id"]] = (
+            torch.load(p, weights_only=True)
+            if source_is_current and not overwrite
+            else {}
+        )
 
     for plm in plms:
         print(f"\n[{plm}] computing for {len(pending)} examples")
@@ -150,8 +165,10 @@ def build_embeddings(
     print(f"\nSaved {len(pending)} embedding bundles to {out_dir}")
 
 
-def _all_plms_present(path: Path, plms: list[str]) -> bool:
+def _all_plms_present(path: Path, plms: list[str], source_path: Path) -> bool:
     if not path.exists():
+        return False
+    if path.stat().st_mtime_ns < source_path.stat().st_mtime_ns:
         return False
     try:
         blob = torch.load(path, weights_only=True)

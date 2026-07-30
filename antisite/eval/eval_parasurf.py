@@ -5,7 +5,7 @@ Usage:
         --dataset PECAN \
         --split TEST \
         --pdb-dir test_data/pdbs/PECAN/TEST \
-        --meta    test_data/pdbs/PECAN/preprocess/test_set.csv \
+        --meta    Data/PECAN/test.csv \
         --cache   cache/PECAN/TEST
 """
 
@@ -21,7 +21,7 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from antisite.eval.labels import get_labels
+from antisite.eval.labels import get_labels, parse_pdb_chain_ids
 from antisite.eval.metrics import aggregate_metrics, per_protein_metrics, print_table
 
 
@@ -46,10 +46,13 @@ def evaluate(
 
     for row in tqdm(rows, desc="Evaluating ParaSurf"):
         pdb_id = row["pdb_code"]
-        heavy  = row["Heavy_chain"]
-        light  = row.get("Light_chain", "") or ""
-        ag_str = row.get("ag", "")
-        ag_chains = set(ag_str.replace(";", " ").split()) if ag_str else set()
+        heavy = row.get("heavy_chain") or row.get("Heavy_chain") or ""
+        light = row.get("light_chain") or row.get("Light_chain") or ""
+        ag_str = row.get("antigen_chain") or row.get("ag") or ""
+        ag_chains = set(parse_pdb_chain_ids(ag_str))
+
+        if not heavy or not light:
+            raise ValueError(f"{pdb_id}: metadata must specify paired heavy and light chains")
 
         receptor_pdb = pdb_dir / f"{pdb_id}_receptor_1.pdb"
         antigen_pdb  = next(pdb_dir.glob(f"{pdb_id}_antigen*.pdb"), None)

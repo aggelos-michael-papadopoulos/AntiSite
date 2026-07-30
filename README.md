@@ -1,6 +1,6 @@
 # AntiSite
 
-**Modality dropout for antibody paratope prediction, with or without structure, from a single model.**
+## **Modality dropout for antibody paratope prediction, with or without structure, from a single model.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -17,9 +17,6 @@ attention layer, so that **one checkpoint serves two inference modes**:
 |---|---|---|
 | **Sequence-only** | Heavy + light chain sequences | No structure available |
 | **3D** | Sequences **+** a structure (ParaSurf features) | Structure available, best accuracy |
-
-The fused head is identical in both modes — no separate heads, no model swap. Feed real ParaSurf
-features for the 3D path, or zeros for the sequence-only path.
 
 ![AntiSite overview](assets/antisite_overview_new.png)
 
@@ -141,7 +138,8 @@ python antisite.py \
 
 Train / validation / test splits for all four benchmarks (Paragraph, PECAN, AACDB, MIPE) are provided
 under **[`Data/`](Data/)** — each row gives the antibody heavy/light and antigen chain IDs **and their
-sequences**. See [`Data/README.md`](Data/README.md) for the schema and split sizes.
+sequences**. See [`Data/README.md`](Data/README.md) for the schema, split sizes, correction notes, and
+checkpoint caveat.
 
 ---
 

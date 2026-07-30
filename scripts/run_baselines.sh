@@ -28,18 +28,18 @@ run_paraplume() {
     --gpu 0 2>&1 | tee -a $LOG
 }
 
-DATA=test_data/pdbs
+PDB_DATA=test_data/pdbs
 
 if [[ "$MODE" == "parasurf" || "$MODE" == "both" ]]; then
-  run_parasurf "PECAN TEST"       $DATA/PECAN/TEST       $DATA/PECAN/preprocess/test_set.csv          cache/PECAN/TEST
-  run_parasurf "Paragraph TEST"   $DATA/Expanded_dataset_Paragraph/Entire_antibody_experiment/TEST   $DATA/Expanded_dataset_Paragraph/Preprocess/test_set.csv   cache/Paragraph_expanded/TEST
-  run_parasurf "MIPE TEST"        $DATA/MIPE/TEST        $DATA/MIPE/Preprocess/test_chains_info_reformatted.csv   cache/MIPE/TEST
+  run_parasurf "PECAN TEST"       $PDB_DATA/PECAN/TEST       Data/PECAN/test.csv          cache/PECAN/TEST
+  run_parasurf "Paragraph TEST"   $PDB_DATA/Expanded_dataset_Paragraph/Entire_antibody_experiment/TEST   Data/Paragraph/test.csv   cache/Paragraph_expanded/TEST
+  run_parasurf "MIPE TEST"        $PDB_DATA/MIPE/TEST        Data/MIPE/test.csv   cache/MIPE/TEST
 fi
 
 if [[ "$MODE" == "paraplume" || "$MODE" == "both" ]]; then
-  run_paraplume "PECAN TEST"       $DATA/PECAN/TEST       $DATA/PECAN/preprocess/test_set.csv
-  run_paraplume "Paragraph TEST"   $DATA/Expanded_dataset_Paragraph/Entire_antibody_experiment/TEST   $DATA/Expanded_dataset_Paragraph/Preprocess/test_set.csv
-  run_paraplume "MIPE TEST"        $DATA/MIPE/TEST        $DATA/MIPE/Preprocess/test_chains_info_reformatted.csv
+  run_paraplume "PECAN TEST"       $PDB_DATA/PECAN/TEST       Data/PECAN/test.csv
+  run_paraplume "Paragraph TEST"   $PDB_DATA/Expanded_dataset_Paragraph/Entire_antibody_experiment/TEST   Data/Paragraph/test.csv
+  run_paraplume "MIPE TEST"        $PDB_DATA/MIPE/TEST        Data/MIPE/test.csv
 fi
 
 echo "" | tee -a $LOG

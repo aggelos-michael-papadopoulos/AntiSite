@@ -41,3 +41,9 @@
 
 # Docker build context: large weights baked at build time (not versioned)
 docker/weights/
+
+# Local dataset-repair audit and validation utilities (not part of the release)
+/Data/SEQUENCE_AUDIT.md
+/scripts/regenerate_data_csvs.py
+/test_antisite/test_data_regeneration.py
+/test_antisite/test_sequence_extraction.py
