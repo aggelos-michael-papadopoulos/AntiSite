@@ -124,6 +124,11 @@ python antisite.py \
 The PLMs encode the sequences and the fused head is fed **zero** 3D features (modality dropout taught
 it to handle this).
 
+<p align="center">
+  <img src="assets/pathA_output.png" width="650" alt="Sequence-only paratope prediction">
+</p>
+<p align="center"><em>Sequence-only residue-level paratope probabilities.</em></p>
+
 ### 3D (when you have a structure)
 
 ```bash
@@ -132,6 +137,11 @@ python antisite.py \
     --antibody 1BVK_antibody.pdb \
     --parasurf-weights ParaSurf/Paragraph_expanded_entire_dataset_best.pth #frozen ParaSurf
 ```
+
+<p align="center">
+  <img src="assets/sample_prediction_1FSK.gif" width="700" alt="AntiSite 3D paratope prediction for PDB 1FSK">
+</p>
+<p align="center"><em>Example 3D paratope prediction for PDB 1FSK; predicted residues are shown in cyan.</em></p>
 
 ---
 
@@ -161,5 +171,6 @@ Released under the [MIT License](LICENSE).
 ## 📖 Citation
 
 ```bibtex
-coming soon ...
+Citation coming soon. The full manuscript citation will be added here after publication.
+
 ```
