@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
+[![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
 
 AntiSite predicts the antibody **paratope** (the residues that contact antigen) from a single trained
 model. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
@@ -140,6 +141,9 @@ Train / validation / test splits for all four benchmarks (Paragraph, PECAN, AACD
 under **[`Data/`](Data/)** — each row gives the antibody heavy/light and antigen chain IDs **and their
 sequences**. See [`Data/README.md`](Data/README.md) for the schema, split sizes, correction notes, and
 checkpoint caveat.
+
+The exact processed PDB inputs and corrected split metadata are archived on
+[Zenodo](https://doi.org/10.5281/zenodo.21705412).
 
 ---
 
