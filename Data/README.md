@@ -17,20 +17,13 @@ Data/
 | Column | Description |
 |---|---|
 | `pdb_code` | Structure identifier. For AACDB it also encodes the chain grouping (e.g. `1FJ1_BAF`), matching the source PDB file. |
-| `heavy_chain` | Heavy-chain role used by the model. It is a biological heavy chain except in the documented nonstandard AACDB rows. |
-| `light_chain` | Light-chain role used by the model. Every row is non-empty, but the documented AACDB fusion/VL-only rows are not conventional light chains. |
+| `heavy_chain` | Heavy-chain id |
+| `light_chain` | Light-chain id |
 | `antigen_chain` | Antigen chain ID(s). May be more than one chain (e.g. `AB`). |
-| `heavy_seq` | Atom-resolved, Fv-sized model input window for `heavy_chain`. |
-| `light_seq` | Atom-resolved, Fv-sized model input window for `light_chain`. |
-| `antigen_seq` | All observed CA residues for the antigen chain(s), without antibody-style truncation. Multiple chains are joined with `:`. |
+| `heavy_seq` |  `heavy_chain`. |
+| `light_seq` |  `light_chain`. |
+| `antigen_seq` | complete antigen sequence. Multiple chains are joined with `:`. |
 
-Sequences are extracted from the structures with the **same** routine AntiSite uses at
-train/inference time (`antisite.eval.labels.extract_sequence`), so they align exactly with the
-model's inputs. For normally numbered antibody chains, the historical author-number selection
-(`resnum <= 128`) is retained when it contains at least 80 observed residues. For offset-numbered
-chains, the first 128 observed CA residues are used instead. This is an Fv-sized model-input heuristic,
-not a newly validated domain boundary. Antigens use all observed CA residues. No residue absent from
-the atomic coordinates is invented from `SEQRES`.
 
 ## Split sizes
 
