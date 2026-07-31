@@ -16,7 +16,7 @@
   <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
 </p>
 
-**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and give it a minute or two to load.
+**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and give it 3 minutes load.
 
 ---
 
