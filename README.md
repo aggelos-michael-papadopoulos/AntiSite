@@ -4,8 +4,21 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue)](https://huggingface.co/spaces/angepapa/AntiSite)
 [![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
+
+---
+🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face now!!!**  
+**Predict a paratope from sequence alone, or upload a structure — both modes, one checkpoint, live in your browser!**
+
+<p align="center">
+  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
+</p>
+
+**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and give it a minute or two to load.
+
+---
 
 AntiSite predicts the antibody **paratope** (the residues that contact antigen) from a single trained
 model. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
