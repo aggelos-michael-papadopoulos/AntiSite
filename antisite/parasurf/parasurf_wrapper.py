@@ -123,6 +123,24 @@ class ParaSurfExtractor(nn.Module):
                 parts = line.split()
                 atom_type_mask.append(len(parts) > 6 and parts[6] == "A")
 
+        atom_mask_np = np.asarray(atom_type_mask, dtype=bool)
+        if atom_mask_np.shape[0] != len(prot.surf_points):
+            raise RuntimeError(
+                f"Surface-point count mismatch: file has {atom_mask_np.shape[0]} rows, "
+                f"but ParaSurf loaded {len(prot.surf_points)} points."
+            )
+
+        # AntiSite aggregates only atom-type surface points (one per heavy atom).
+        # Reentrant/contact points were previously run through the expensive voxel
+        # CNN and then discarded below. Select the retained points before feature
+        # construction instead; samples are independent in eval mode, so their
+        # scores and 256-d features are unchanged.
+        atom_point_indices = np.flatnonzero(atom_mask_np)
+        print(
+            f"ParaSurf: evaluating {len(atom_point_indices)}/{len(prot.surf_points)} "
+            f"atom-type surface points on {self.device} (batch={batch_size})"
+        )
+
         # Forward in batches; the pre-hook captures features in lockstep with scores.
         self._feature_buffer.clear()
         scores_list: list[np.ndarray] = []
@@ -130,9 +148,11 @@ class ParaSurfExtractor(nn.Module):
             (batch_size, self.grid_size, self.grid_size, self.grid_size, self.feature_channels),
             device=self.device,
         )
-        n_points = len(prot.surf_points)
+        n_points = len(atom_point_indices)
         batch_cnt = 0
-        for p, n in zip(prot.surf_points, prot.surf_normals):
+        for point_idx in atom_point_indices:
+            p = prot.surf_points[point_idx]
+            n = prot.surf_normals[point_idx]
             input_data[batch_cnt] = torch.tensor(
                 self.featurizer.grid_feats(p, n, prot.heavy_atom_coords),
                 device=self.device,
@@ -152,10 +172,9 @@ class ParaSurfExtractor(nn.Module):
             f"Shape mismatch: scores={scores_all.shape}, features={features_all.shape}, n_points={n_points}"
         )
 
-        # Filter to atom-type surface points (one per heavy atom, in PDB order).
-        atom_mask_np = np.array(atom_type_mask, dtype=bool)
-        scores_atoms = scores_all[atom_mask_np]           # [n_heavy_atoms]
-        features_atoms = features_all[atom_mask_np]       # [n_heavy_atoms, 256]
+        # Every computed sample is now an atom-type point, in the original order.
+        scores_atoms = scores_all                         # [n_heavy_atoms]
+        features_atoms = features_all                     # [n_heavy_atoms, 256]
 
         # Map each atom to its residue. Keys follow ParaSurf's convention: "resnum_chain"
         # (plus "_insertion" when present). Order = first appearance in the PDB.
