@@ -21,7 +21,7 @@
 ---
 
 AntiSite predicts the antibody **paratope** (the residues that contact antigen) from a single trained
-model. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
+model. It is antigen agnostic. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
 training steps, so one checkpoint learns to predict both with and without a structure. It combines
 frozen protein-language-model (PLM) embeddings with molecular-surface features
 (from [ParaSurf](https://github.com/aggelos-michael-papadopoulos/ParaSurf)) through a cross-modal
