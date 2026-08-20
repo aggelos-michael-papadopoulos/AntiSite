@@ -42,6 +42,11 @@
 # Docker build context: large weights baked at build time (not versioned)
 docker/weights/
 
+# Local figure-conversion helper and its generated EPS output (not part of the
+# release; pdf2eps.sh is already covered by the /* rule above, listed for clarity)
+/pdf2eps.sh
+/assets/*.eps
+
 # Local dataset-repair audit and validation utilities (not part of the release)
 /Data/SEQUENCE_AUDIT.md
 /scripts/regenerate_data_csvs.py
