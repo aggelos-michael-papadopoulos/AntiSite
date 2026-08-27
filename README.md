@@ -7,6 +7,7 @@
 [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue)](https://huggingface.co/spaces/angepapa/AntiSite)
 [![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://doi.org/10.64898/2026.08.24.745914)
 
 ---
 🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face now!!!**  
@@ -183,5 +184,25 @@ Released under the [MIT License](LICENSE).
 
 ## 📖 Citation
 
+If you use AntiSite in your research, please cite the preprint:
 
-Citation coming soon. The full manuscript citation will be added here after publication.
+> Papadopoulos, A. M., Alvarez, F., & Daras, P. (2026). *AntiSite: Modality Dropout Enables
+> Antibody Paratope Prediction With or Without Structure From a Single Model.* bioRxiv.
+> https://doi.org/10.64898/2026.08.24.745914
+
+```bibtex
+@article{papadopoulos2026antisite,
+  title   = {{AntiSite}: Modality Dropout Enables Antibody Paratope Prediction
+             With or Without Structure From a Single Model},
+  author  = {Papadopoulos, Angelos Michail and Alvarez, Federico and Daras, Petros},
+  journal = {bioRxiv},
+  year    = {2026},
+  doi     = {10.64898/2026.08.24.745914},
+  url     = {https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1}
+}
+```
+
+This is a preprint; the citation will be updated here if the paper is published after peer review.
+
+If you use the processed structures or corrected splits, please also cite the dataset archive:
+[10.5281/zenodo.21705412](https://doi.org/10.5281/zenodo.21705412).
