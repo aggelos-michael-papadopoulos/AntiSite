@@ -204,5 +204,3 @@ If you use AntiSite in your research, please cite the preprint:
 
 This is a preprint; the citation will be updated here if the paper is published after peer review.
 
-If you use the processed structures or corrected splits, please also cite the dataset archive:
-[10.5281/zenodo.21705412](https://doi.org/10.5281/zenodo.21705412).
