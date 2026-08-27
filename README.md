@@ -186,10 +186,6 @@ Released under the [MIT License](LICENSE).
 
 If you use AntiSite in your research, please cite the preprint:
 
-> Papadopoulos, A. M., Alvarez, F., & Daras, P. (2026). *AntiSite: Modality Dropout Enables
-> Antibody Paratope Prediction With or Without Structure From a Single Model.* bioRxiv.
-> https://doi.org/10.64898/2026.08.24.745914
-
 ```bibtex
 @article{papadopoulos2026antisite,
   title   = {{AntiSite}: Modality Dropout Enables Antibody Paratope Prediction
