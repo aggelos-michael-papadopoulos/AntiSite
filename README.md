@@ -198,5 +198,5 @@ If you use AntiSite in your research, please cite the preprint:
 }
 ```
 
-** This is a preprint; the citation will be updated here if the paper is published after peer review. **
+**This is a preprint; the citation will be updated here if the paper is published after peer review.**
 
