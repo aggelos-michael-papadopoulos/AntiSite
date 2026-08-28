@@ -7,7 +7,7 @@
 [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue)](https://huggingface.co/spaces/angepapa/AntiSite)
 [![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
-[![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://doi.org/10.64898/2026.08.24.745914)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1)
 
 ---
 🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face now!!!**  
