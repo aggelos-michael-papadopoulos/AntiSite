@@ -188,13 +188,12 @@ If you use AntiSite in your research, please cite the preprint:
 
 ```bibtex
 @article{papadopoulos2026antisite,
-  title   = {{AntiSite}: Modality Dropout Enables Antibody Paratope Prediction
-             With or Without Structure From a Single Model},
-  author  = {Papadopoulos, Angelos Michail and Alvarez, Federico and Daras, Petros},
-  journal = {bioRxiv},
-  year    = {2026},
-  doi     = {10.64898/2026.08.24.745914},
-  url     = {https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1}
+  title={AntiSite: Modality Dropout Enables Antibody Paratope Prediction With or Without Structure From a Single Model},
+  author={Papadopoulos, Angelos Michail and Alvarez, Federico and Daras, Petros},
+  journal={bioRxiv},
+  pages={2026--08},
+  year={2026},
+  publisher={Cold Spring Harbor Laboratory}
 }
 ```
 
