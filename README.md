@@ -4,13 +4,14 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue)](https://huggingface.co/spaces/angepapa/AntiSite)
-[![Docker Hub](https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image)](https://hub.docker.com/r/angepapa/antisite)
+[![Hugging Face Space](<https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue>)](https://huggingface.co/spaces/angepapa/AntiSite)
+[![Docker Hub](<https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image>)](https://hub.docker.com/r/angepapa/antisite)
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1)
 
 ---
-🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face now!!!**  
+
+🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face  now!!!**
 **Predict a paratope from sequence alone, or upload a structure — both modes, one checkpoint, live in your browser!**
 
 <p align="center">
@@ -28,10 +29,10 @@ frozen protein-language-model (PLM) embeddings with molecular-surface features
 (from [ParaSurf](https://github.com/aggelos-michael-papadopoulos/ParaSurf)) through a cross-modal
 attention layer, so that **one checkpoint serves two inference modes**:
 
-| Mode | Input | When to use |
-|---|---|---|
-| **Sequence-only** | Heavy + light chain sequences | No structure available |
-| **3D** | Sequences **+** a structure (ParaSurf features) | Structure available, best accuracy |
+| Mode                    | Input                                                | When to use                        |
+| ----------------------- | ---------------------------------------------------- | ---------------------------------- |
+| **Sequence-only** | Heavy + light chain sequences                        | No structure available             |
+| **3D**            | Sequences**+** a structure (ParaSurf features) | Structure available, best accuracy |
 
 ![AntiSite overview](assets/antisite_overview_new.png)
 
@@ -111,12 +112,12 @@ The headline released model is [`release/checkpoints/antisite_paragraph.pt`](rel
 the same file runs both inference modes. Checkpoints trained on each benchmark are provided under
 [`release/checkpoints/`](release/checkpoints/):
 
-| Checkpoint | Trained on |
-|---|---|
-| `antisite_paragraph.pt` | Paragraph (headline model) |
-| `antisite_pecan.pt` | PECAN |
-| `antisite_aacdb.pt` | AACDB |
-| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold) |
+| Checkpoint                      | Trained on                 |
+| ------------------------------- | -------------------------- |
+| `antisite_paragraph.pt`       | Paragraph (headline model) |
+| `antisite_pecan.pt`           | PECAN                      |
+| `antisite_aacdb.pt`           | AACDB                      |
+| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold)              |
 
 Every checkpoint uses the same 2-PLM (ProtT5 + ESM-2) architecture and runs both inference modes.
 
@@ -198,4 +199,3 @@ If you use AntiSite in your research, please cite the preprint:
 ```
 
 **This is a preprint; the citation will be updated here if the paper is published after peer review.**
-
