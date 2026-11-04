@@ -230,7 +230,14 @@ def main() -> None:
     valid_mask = torch.ones(1, L, dtype=torch.bool, device=dev)
 
     # 5. AntiSite fused inference.
-    model = AntiSite(enabled_plms=enabled_plms).to(dev).eval()
+    n_xa = blob.get("cross_modal_layers")
+    if n_xa is None:
+        n_xa = len({k.split(".")[2] for k in sd if k.startswith("cross_modal.layers.")})
+    model = AntiSite(
+        enabled_plms=enabled_plms,
+        cross_modal_layers=n_xa,
+        cross_modal_heads=blob.get("cross_modal_heads", 4),
+    ).to(dev).eval()
     model.load_state_dict(sd)
     print(f"[{pdb_stem}] Loaded AntiSite: {args.ckpt}  "
           f"(epoch {blob.get('epoch','?')}, val fused PR-AUC {blob.get('val_fused_pr', float('nan')):.3f})")
