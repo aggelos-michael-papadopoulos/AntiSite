@@ -4,7 +4,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Hugging Face Space](<https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue>)](https://huggingface.co/spaces/angepapa/AntiSite)
 [![Docker Hub](<https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image>)](https://hub.docker.com/r/angepapa/antisite)
-[![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
+[![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23949886.svg)](https://doi.org/10.5281/zenodo.23949886)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1)
 
 AntiSite predicts the **paratope** (the antibody binding site) of conventional antibodies and
@@ -171,8 +171,8 @@ The final additional test sets are also included: **[SAbDab2, 178 paired-antibod
 and **[VHH, 140 nanobody complexes](Data/VHH/test_final.csv)**. Both were evaluated without retraining;
 their manifests include antibody/antigen sequences and original PDB chain mappings.
 
-Processed PDB inputs and corrected split metadata for the four original benchmarks are archived on
-[Zenodo](https://doi.org/10.5281/zenodo.21705412).
+Processed PDB inputs and split metadata for the four original benchmarks and the SAbDab2/VHH test sets are archived on
+[Zenodo](https://doi.org/10.5281/zenodo.23949886).
 
 ---
 
