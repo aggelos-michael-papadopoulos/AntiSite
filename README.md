@@ -167,7 +167,11 @@ under **[`Data/`](Data/)** — each row gives the antibody heavy/light and antig
 sequences**. See [`Data/README.md`](Data/README.md) for the schema, split sizes, correction notes, and
 checkpoint caveat.
 
-The exact processed PDB inputs and corrected split metadata are archived on
+The final additional test sets are also included: **[SAbDab2, 178 paired-antibody complexes](Data/SabDab2/test_final.csv)**
+and **[VHH, 140 nanobody complexes](Data/VHH/test_final.csv)**. Both were evaluated without retraining;
+their manifests include antibody/antigen sequences and original PDB chain mappings.
+
+Processed PDB inputs and corrected split metadata for the four original benchmarks are archived on
 [Zenodo](https://doi.org/10.5281/zenodo.21705412).
 
 ---
