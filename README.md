@@ -1,6 +1,4 @@
-# AntiSite
-
-## **Modality dropout for antibody paratope prediction, with or without structure, from a single model.**
+# AntiSite: Unified paratope prediction for antibodies and nanobodies with or without structure
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
@@ -9,30 +7,27 @@
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21705412.svg)](https://doi.org/10.5281/zenodo.21705412)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1)
 
----
+AntiSite predicts the **paratope** (the antibody binding site) of conventional antibodies and
+nanobodies. Both inference modes are **antigen-agnostic**: no antigen sequence or structure is required.
+Frozen **ProtT5 and ESM-2** protein language models provide sequence representations, and the same
+trained AntiSite sequence encoder, fusion block and prediction head operate with or without structural
+input. **Structural-modality dropout** withholds the surface features on half of the training batches,
+teaching these shared weights to handle both settings without retraining.
 
-🚀 **Try [AntiSite](https://huggingface.co/spaces/angepapa/AntiSite) on 🤗 Hugging Face  now!!!**
-**Predict a paratope from sequence alone, or upload a structure — both modes, one checkpoint, live in your browser!**
+When a structure is provided, a separately pretrained
+[ParaSurf](https://github.com/aggelos-michael-papadopoulos/ParaSurf) encoder provides molecular-surface
+features, which AntiSite combines with sequence representations through cross-modal attention.
+ParaSurf was pretrained for paratope prediction and remains frozen during AntiSite training;
+its classification head is unused. Thus, **both modes share one AntiSite prediction checkpoint**,
+while structure-aware inference additionally requires the corresponding ParaSurf encoder weights.
 
-<p align="center">
-  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
-</p>
+| Mode | Input | When to use |
+|---|---|---|
+| **Sequence-only** | Heavy + light chain sequences, or a VHH sequence | No antibody structure available |
+| **Structure-aware (3D)** | Antibody structure; sequences are extracted automatically | Reliable structural information available |
 
-**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and give it 3 minutes to load.
-
----
-
-AntiSite predicts the antibody **paratope** (the residues that contact antigen) from a single trained
-model. It is antigen agnostic. Its key design choice is **modality dropout**: the 3D features are withheld on half of the
-training steps, so one checkpoint learns to predict both with and without a structure. It combines
-frozen protein-language-model (PLM) embeddings with molecular-surface features
-(from [ParaSurf](https://github.com/aggelos-michael-papadopoulos/ParaSurf)) through a cross-modal
-attention layer, so that **one checkpoint serves two inference modes**:
-
-| Mode                    | Input                                                | When to use                        |
-| ----------------------- | ---------------------------------------------------- | ---------------------------------- |
-| **Sequence-only** | Heavy + light chain sequences                        | No structure available             |
-| **3D**            | Sequences**+** a structure (ParaSurf features) | Structure available, best accuracy |
+The paired-antibody-trained model also supports nanobodies without additional training.
+The benefit of predicted structures depends on their accuracy.
 
 ![AntiSite overview](assets/antisite_overview_new.png)
 
@@ -40,9 +35,9 @@ attention layer, so that **one checkpoint serves two inference modes**:
 
 ## ⚙️ Installation
 
-AntiSite's headline model is structure-aware, so the full install below sets up **both** the sequence
-and the 3D (ParaSurf) path. The same checkpoint can still run **sequence-only at inference** when you
-have no structure; that is a runtime choice, not a lighter install.
+The full installation below supports **both** sequence-only and structure-aware inference.
+The same AntiSite checkpoint runs either mode; sequence-only prediction does not run ParaSurf
+or require its weights.
 
 ### 🐳 Docker (recommended — zero setup, nothing to download)
 
@@ -108,16 +103,19 @@ Download the ParaSurf **Paragraph-expanded** weights here: [Paragraph_expanded_e
 At inference, point AntiSite at a ParaSurf weight file with `--parasurf-weights` (3D mode); omit the
 structure to run sequence-only.
 
-The headline released model is [`release/checkpoints/antisite_paragraph.pt`](release/checkpoints/antisite_paragraph.pt);
-the same file runs both inference modes. Checkpoints trained on each benchmark are provided under
+The headline released model is [`release/checkpoints/antisite_paragraph.pt`](release/checkpoints/antisite_paragraph.pt).
+Use the Paragraph-expanded ParaSurf weights linked above for its structure-aware mode.
+Other AntiSite checkpoints require their corresponding ParaSurf extractors for structure-aware use;
+do not assume that the Paragraph-expanded extractor is interchangeable with them.
+Checkpoints trained on each benchmark are provided under
 [`release/checkpoints/`](release/checkpoints/):
 
-| Checkpoint                      | Trained on                 |
-| ------------------------------- | -------------------------- |
-| `antisite_paragraph.pt`       | Paragraph (headline model) |
-| `antisite_pecan.pt`           | PECAN                      |
-| `antisite_aacdb.pt`           | AACDB                      |
-| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold)              |
+| Checkpoint | Trained on |
+|---|---|
+| `antisite_paragraph.pt` | Paragraph-expanded (headline model) |
+| `antisite_pecan.pt` | PECAN |
+| `antisite_aacdb.pt` | AACDB |
+| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold) |
 
 Every checkpoint uses the same 2-PLM (ProtT5 + ESM-2) architecture and runs both inference modes.
 
@@ -125,7 +123,8 @@ Every checkpoint uses the same 2-PLM (ProtT5 + ESM-2) architecture and runs both
 
 ## 🔮 Inference
 
-One command, **one `.pt` file**, two operating modes — the same checkpoint handles both.
+Both modes use the **same AntiSite prediction checkpoint**. Structure-aware mode also loads
+the frozen ParaSurf encoder specified by `--parasurf-weights`.
 
 ### Sequence-only (no structure needed)
 
@@ -136,8 +135,9 @@ python antisite.py \
     -vl DIAMTQTTSSLSASLGQKVTISCRASQDIGNYLNWYQQKPDGTVRLLIYYTSRLHSGVPSRFSGSGSGTDYSLTISNLESEDIATYFCQNGGTNPWTFGGGTKLEVKR
 ```
 
-The PLMs encode the sequences and the fused head is fed **zero** 3D features (modality dropout taught
-it to handle this).
+The PLMs encode the sequences, and the shared fusion block and prediction head receive **zero**
+surface features, as during modality-dropout training. For a nanobody, provide its VHH sequence
+with `-vh` and omit `-vl`.
 
 <p align="center">
   <img src="assets/pathA_output.png" width="500" alt="Sequence-only paratope prediction">
@@ -176,6 +176,24 @@ The exact processed PDB inputs and corrected split metadata are archived on
 
 To reproduce AntiSite from scratch (data preparation, PLM embedding, ParaSurf feature precompute, and
 single-dataset / 5-fold training), see **[TRAIN.md](TRAIN.md)**.
+
+The source also includes optional **ESM-C 6B** embedding support (`compute_esmc_embeddings` and
+the `esmc_6b` model configuration) used in the supplementary comparison. Released checkpoints and
+the prediction CLI use ProtT5 + ESM-2. ESM-C embedding generation requires a separate environment
+with `multimolecule` and `transformers==5.7.0`; keep it separate from the standard AntiSite environment,
+which pins `transformers==4.42.4`.
+
+---
+
+## 🤗 Optional browser demo
+
+The [Hugging Face Space](https://huggingface.co/spaces/angepapa/AntiSite) provides a browser interface
+for sequence-only and structure-aware prediction when the hosted demo is available.
+Local installation and downloaded checkpoints allow prediction independently of the hosted demo.
+
+<p align="center">
+  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
+</p>
 
 ---
 

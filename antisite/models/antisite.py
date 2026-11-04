@@ -51,6 +51,7 @@ PLM_DIMS: dict[str, int] = {
     "prot_t5":   1024,
     "igt5":      1024,
     "igbert":    1024,
+    "esmc_6b":   2560,   # ESM C 6B (multimolecule/esmc-6b); ESM-C ablation only
 }
 
 # Default PLM stack — the two general protein language models selected by the

@@ -191,6 +191,44 @@ def compute_esm_embeddings(
     return F.pad(esm_embeddings, padding, mode="constant", value=0).cpu()
 
 
+_ESMC_CACHE: dict = {}
+
+
+def compute_esmc_embeddings(
+    sequence_heavy_emb: list,
+    sequence_light_emb: list,
+    gpu: int = 0,
+    *,
+    single_chain: bool = False,  # noqa: ARG001
+    model_name: str = "multimolecule/esmc-6b",
+) -> torch.Tensor:
+    """Compute ESM C embeddings (ESM-C ablation only; not part of the released stack).
+
+    Mirrors :func:`compute_esm_embeddings`: heavy and light are concatenated without a
+    linker, the last hidden state is taken and the BOS position dropped, then padded to 285.
+    The 6B model runs in bfloat16 and is cached across calls.
+
+    Needs the ``multimolecule`` package with ``transformers==5.7.0`` (a separate env from
+    the AntiSite training env, which pins ``transformers==4.42.4``).
+    """
+    from multimolecule import EsmCModel, ProteinTokenizer  # noqa: PLC0415
+
+    device = get_device(gpu)
+    if model_name not in _ESMC_CACHE:
+        tokenizer = ProteinTokenizer.from_pretrained(model_name)
+        model = EsmCModel.from_pretrained(model_name, dtype=torch.bfloat16).to(device).eval()
+        _ESMC_CACHE[model_name] = (tokenizer, model)
+    tokenizer, model = _ESMC_CACHE[model_name]
+
+    sequences = [h + l for h, l in zip(sequence_heavy_emb, sequence_light_emb, strict=False)]
+    tokens = tokenizer(sequences, return_tensors="pt", padding=True).to(device)
+    with torch.no_grad():
+        hidden = model(**tokens).last_hidden_state.float()
+    hidden = hidden[:, 1:, :]
+    pad_length = max(285 - hidden.size(1), 0)
+    return F.pad(hidden, (0, 0, 0, pad_length), mode="constant", value=0).cpu()
+
+
 def compute_igbert_embeddings(
     sequence_heavy_emb: list,
     sequence_light_emb: list,
