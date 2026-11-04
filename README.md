@@ -41,7 +41,7 @@ Predict antibody and nanobody binding sites from sequence alone or with an antib
 and explore the results interactively.
 
 <p align="center">
-  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
+  <img src="assets/AntiSite_HF_demo.gif" alt="AntiSite Hugging Face demo" width="800">
 </p>
 
 **Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and wait about 3 minutes for it to fully load.
