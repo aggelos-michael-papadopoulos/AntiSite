@@ -33,6 +33,21 @@ The benefit of predicted structures depends on their accuracy.
 
 ---
 
+## 🤗 Web demo
+
+🚀 **[AntiSite is live on Hugging Face!](https://huggingface.co/spaces/angepapa/AntiSite)**
+
+Predict antibody and nanobody binding sites from sequence alone or with an antibody structure,
+and explore the results interactively.
+
+<p align="center">
+  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
+</p>
+
+**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and wait about 3 minutes for it to fully load.
+
+---
+
 ## ⚙️ Installation
 
 The full installation below supports **both** sequence-only and structure-aware inference.
@@ -189,18 +204,6 @@ which pins `transformers==4.42.4`.
 
 ---
 
-## 🤗 Optional browser demo
-
-The [Hugging Face Space](https://huggingface.co/spaces/angepapa/AntiSite) provides a browser interface
-for sequence-only and structure-aware prediction when the hosted demo is available.
-Local installation and downloaded checkpoints allow prediction independently of the hosted demo.
-
-<p align="center">
-  <img src="assets/antisite_hugging_face.gif" alt="AntiSite Hugging Face demo" width="800">
-</p>
-
----
-
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
@@ -220,4 +223,4 @@ If you use AntiSite in your research, please cite the preprint:
 }
 ```
 
-**This is a preprint; the citation will be updated here if the paper is published after peer review.**
+**This is a preprint; the citation will be updated here when the paper is published after peer review.**
