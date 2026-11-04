@@ -29,7 +29,7 @@ while structure-aware inference additionally requires the corresponding ParaSurf
 The paired-antibody-trained model also supports nanobodies without additional training.
 The benefit of predicted structures depends on their accuracy.
 
-![AntiSite overview](assets/antisite_overview_new.png)
+![AntiSite overview (Figure 1)](assets/antisite_figure1.png)
 
 ---
 
