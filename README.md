@@ -21,15 +21,15 @@ ParaSurf was pretrained for paratope prediction and remains frozen during AntiSi
 its classification head is unused. Thus, **both modes share one AntiSite prediction checkpoint**,
 while structure-aware inference additionally requires the corresponding ParaSurf encoder weights.
 
-| Mode | Input | When to use |
-|---|---|---|
-| **Sequence-only** | Heavy + light chain sequences, or a VHH sequence | No antibody structure available |
+| Mode                           | Input                                                     | When to use                               |
+| ------------------------------ | --------------------------------------------------------- | ----------------------------------------- |
+| **Sequence-only**        | Heavy + light chain sequences, or a VHH sequence          | No antibody structure available           |
 | **Structure-aware (3D)** | Antibody structure; sequences are extracted automatically | Reliable structural information available |
 
 The paired-antibody-trained model also supports nanobodies without additional training.
 The benefit of predicted structures depends on their accuracy.
 
-![AntiSite overview (Figure 1)](assets/antisite_figure1.png)
+![AntiSite overview (Figure 1)](assets/antisite_overview.png)
 
 ---
 
@@ -125,12 +125,12 @@ do not assume that the Paragraph-expanded extractor is interchangeable with them
 Checkpoints trained on each benchmark are provided under
 [`release/checkpoints/`](release/checkpoints/):
 
-| Checkpoint | Trained on |
-|---|---|
-| `antisite_paragraph.pt` | Paragraph-expanded (headline model) |
-| `antisite_pecan.pt` | PECAN |
-| `antisite_aacdb.pt` | AACDB |
-| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold) |
+| Checkpoint                      | Trained on                          |
+| ------------------------------- | ----------------------------------- |
+| `antisite_paragraph.pt`       | Paragraph-expanded (headline model) |
+| `antisite_pecan.pt`           | PECAN                               |
+| `antisite_aacdb.pt`           | AACDB                               |
+| `antisite_mipe_fold{0..4}.pt` | MIPE (5-fold)                       |
 
 Every checkpoint uses the same 2-PLM (ProtT5 + ESM-2) architecture and runs both inference modes.
 
