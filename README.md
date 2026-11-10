@@ -169,7 +169,7 @@ python antisite.py \
 ```
 
 <p align="center">
-  <img src="assets/sample_prediction_1FSK.gif" width="700" alt="AntiSite 3D paratope prediction for PDB 1FSK">
+  <img src="assets/sample_prediction_1FSK_transparent.gif" width="700" alt="AntiSite 3D paratope prediction for PDB 1FSK with a transparent background">
 </p>
 <p align="center"><em>Example 3D paratope prediction for PDB 1FSK; predicted residues are shown in cyan.</em></p>
 
