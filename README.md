@@ -37,6 +37,8 @@ The benefit of predicted structures depends on their accuracy.
 
 🚀 **[AntiSite is live on Hugging Face!](https://huggingface.co/spaces/angepapa/AntiSite)**
 
+**Status (20 Nov 2026):** Demo temporarily unavailable due to a Hugging Face GPU startup issue. Local installation remains available.
+
 Predict antibody and nanobody binding sites from sequence alone or with an antibody structure,
 and explore the results interactively.
 
