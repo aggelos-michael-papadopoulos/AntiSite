@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Hugging Face Space](<https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue>)](https://huggingface.co/spaces/angepapa/AntiSite)
+[![Hugging Face Space](<https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Demo-blue>)](https://huggingface.co/spaces/angepapa/antisite_demo)
 [![Docker Hub](<https://img.shields.io/docker/image-size/angepapa/antisite/latest?logo=docker&label=docker%20image>)](https://hub.docker.com/r/angepapa/antisite)
 [![Dataset DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23949886.svg)](https://doi.org/10.5281/zenodo.23949886)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-2026.08.24.745914-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.08.24.745914v1)
@@ -35,9 +35,7 @@ The benefit of predicted structures depends on their accuracy.
 
 ## 🤗 Web demo
 
-🚀 **[AntiSite is live on Hugging Face!](https://huggingface.co/spaces/angepapa/AntiSite)**
-
-**Status (20 Nov 2026):** Demo temporarily unavailable due to a Hugging Face GPU startup issue. Local installation remains available.
+🚀 **[AntiSite is live on Hugging Face!](https://huggingface.co/spaces/angepapa/antisite_demo)**
 
 Predict antibody and nanobody binding sites from sequence alone or with an antibody structure,
 and explore the results interactively.
@@ -46,7 +44,8 @@ and explore the results interactively.
   <img src="assets/AntiSite_HF_demo.gif" alt="AntiSite Hugging Face demo" width="800">
 </p>
 
-**Note:** If you see *"This Space is sleeping due to inactivity"*, click "Restart this Space" and wait about 3 minutes for it to fully load.
+**Note:** The demo runs on Hugging Face ZeroGPU. It may need time to wake after inactivity;
+predictions are subject to GPU queues and per-user quotas.
 
 ---
 
